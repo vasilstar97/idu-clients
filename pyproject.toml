@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "idu_clients"
+version = "0.0.1"
+authors = [
+    { name = "Vasilii Starikov", email = "vasilstar97@gmail.com" }
+]
+description = "..."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENCE.md" }
+
+dependencies = [
+    "geopandas",
+    "pandas"
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+]
+
+[tool.setuptools.packages.find]
+include = ["idu_clients*"]
+
+[project.optional-dependencies]
+dev = [
+    "black[jupyter]>=22",
+    "isort>=5.6",
+    "pylint>=2.17",
+    "pre-commit>=3.1",
+    "sphinx==6.2.1",
+    "sphinx-book-theme==1.0.1",
+    "numpydoc==1.5.0",
+    "pytest==7.4.3",
+    "pytest-cov==4.1.0"
+]
+
+docs = [
+    
+]
+
+
+[project.urls]
+"Repository" = "https://github.com/vasilstar97/idu-clients"
+"Bug Tracker" = "https://github.com/vasilstar97/idu-clients/issues"
+
+
+[tool.black]
+line-length = 120
+target-version = ['py310']
+
+[tool.pylint.format]
+max-line-length = 120
+expected-line-ending-format = "LF"
+
+[tool.pylint.main]
+extension-pkg-allow-list = ["pydantic"]
+
+[tool.pycodestyle]
+max-line-length = 120
+
+
+[tool.isort]
+lines_after_imports = 2
+multi_line_output = 3
+line_length = 120
+include_trailing_comma = true
