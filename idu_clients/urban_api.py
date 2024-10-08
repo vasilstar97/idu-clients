@@ -1,11 +1,11 @@
 import requests
 import pandas as pd
 import geopandas as gpd
-from ..client import Client
+from .base_client import BaseClient
 
 CRS = 4326
 
-class UrbanAPI(Client):
+class UrbanAPI(BaseClient):
 
     async def get_country_regions(self, country_id : int) -> pd.DataFrame:
         res = requests.get(self.url + 'api/v1/all_territories', {
@@ -36,5 +36,5 @@ class UrbanAPI(Client):
         df = pd.json_normalize(gdf['territory_type']).rename(columns={
             'name':'territory_type_name'
         })
-        gdf = pd.DataFrame.join(gdf, df)
+        gdf = pd.DataFrame.join(gdf, df).set_index('territory_id', drop=True)
         return {level:gdf[gdf['level'] == level] for level in set(gdf.level)}
