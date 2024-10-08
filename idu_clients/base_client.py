@@ -1,7 +1,7 @@
 import requests
 from abc import ABC
 
-class Client(ABC):
+class BaseClient(ABC):
 
     def __init__(self, host : str):
         assert host.find('http://')==0 or host.find('https://') == 0, 'Must include "http://" or "https://"'
