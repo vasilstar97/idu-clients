@@ -26,6 +26,30 @@ class UrbanAPI(BaseClient):
     async def get_territory_types(self) -> pd.DataFrame:
         res = requests.get(self.url + 'api/v1/territory_types')
         return pd.DataFrame(res.json()).set_index('territory_type_id', drop=True)
+    
+    async def get_urban_functions(self, parent_urban_function_id : int | None = None) -> pd.DataFrame:
+        res = requests.get(self.url + '/api/v1/urban_functions_by_parent', {
+            'parent_id': parent_urban_function_id,
+            'get_all_subtree': False
+        })
+        return pd.DataFrame(res.json()).set_index('urban_function_id', drop=True)
+    
+    async def get_service_types(self, urban_function_id : int | None = None) -> pd.DataFrame:
+        res = requests.get(self.url + '/api/v1/service_types', {
+            'urban_function_id' : urban_function_id
+        })
+        return pd.DataFrame(res.json()).set_index('service_type_id', drop=True)
+    
+    async def get_indicators(self, parent_indicator_id : int | None = None, territory_id : int | None = None) -> pd.DataFrame:
+        res = requests.get(self.url + f'/api/v1/indicators_by_parent', {
+            'parent_id' : parent_indicator_id,
+            'territory_id': territory_id
+        })
+        return pd.DataFrame(res.json()).set_index('indicator_id', drop=True)
+    
+    async def get_measurement_units(self) -> pd.DataFrame:
+        res = requests.get(self.url + f'/api/v1/measurement_units')
+        return pd.DataFrame(res.json()).set_index('measurement_unit_id', drop=True)
 
     async def get_region_territories(self, region_id : int) -> dict[int, gpd.GeoDataFrame]:
         res = requests.get(self.url + '/api/v1/all_territories', {
