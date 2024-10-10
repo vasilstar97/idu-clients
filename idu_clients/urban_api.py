@@ -51,6 +51,23 @@ class UrbanAPI(BaseClient):
         res = requests.get(self.url + f'/api/v1/measurement_units')
         return pd.DataFrame(res.json()).set_index('measurement_unit_id', drop=True)
 
+    async def get_territory_capacity(self, territory_id : int, service_type_id : int):
+        res = requests.get(self.url + f'/api/v1/territory/{territory_id}/services_capacity', {
+            'service_type_id': service_type_id
+        })
+        return res.json()
+
+    async def get_territories_capacities(self, territories_ids : list[int], service_type_id : int):
+        capacities = {self.get_territory_capacity(id, service_type_id) for id in territories_ids}
+        df = pd.DataFrame(data=territories_ids, columns=['territory_id'])
+        df = df.set_index('territory_id', drop=True)
+        df[service_type_id] = [await c for c in capacities]
+        return df
+
+    async def get_territory_normatives(self, territory_id : int):
+        res = requests.get(self.url + f'/api/v1/territory/{territory_id}/normatives')
+        return pd.DataFrame(res.json())
+
     async def get_region_territories(self, region_id : int) -> dict[int, gpd.GeoDataFrame]:
         res = requests.get(self.url + '/api/v1/all_territories', {
             'parent_id': region_id,
